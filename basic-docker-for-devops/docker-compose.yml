@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+  app:
+    image: wordpress
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: culiop_demo
+      WORDPRESS_DB_PASSWORD: culiop_demo
+      WORDPRESS_DB_NAME: culiop_demo
+    ports:
+      - "8000:80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - wordpress:/var/www/html
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: culiop_demo
+      MYSQL_USER: culiop_demo
+      MYSQL_PASSWORD: culiop_demo
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  wordpress:
+  db:
